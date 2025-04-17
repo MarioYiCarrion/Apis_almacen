@@ -5,7 +5,7 @@ exports.createProducto = async (req, res) => {
   const { nombre, tipo_producto_id, unidad_medida_id, marca_id } = req.body;
   try {
     const [result] = await db.query(`
-      INSERT INTO Producto (nombre, tipo_producto_id, unidad_medida_id, marca_id)
+      INSERT INTO producto (nombre, tipo_producto_id, unidad_medida_id, marca_id)
       VALUES (?, ?, ?, ?)
     `, [nombre, tipo_producto_id, unidad_medida_id, marca_id]);
 
@@ -24,10 +24,10 @@ exports.getProductosByUsuario = async (req, res) => {
   try {
     const [rows] = await db.query(`
       SELECT p.*, t.nombre AS tipo, u.nombre AS unidad, m.nombre AS marca
-      FROM Producto p
-      JOIN TipoProducto t ON p.tipo_producto_id = t.id
-      JOIN UnidadMedida u ON p.unidad_medida_id = u.id
-      JOIN Marca m ON p.marca_id = m.id
+      FROM producto p
+      JOIN tipoproducto t ON p.tipo_producto_id = t.id
+      JOIN unidadmedida u ON p.unidad_medida_id = u.id
+      JOIN marca m ON p.marca_id = m.id
       WHERE EXISTS (
         SELECT 1 FROM Ingreso i WHERE i.producto_id = p.id AND i.usuario_id = ?
         UNION
@@ -47,7 +47,7 @@ exports.updateProducto = async (req, res) => {
   const { nombre, tipo_producto_id, unidad_medida_id, marca_id } = req.body;
   try {
     await db.query(`
-      UPDATE Producto
+      UPDATE producto
       SET nombre = ?, tipo_producto_id = ?, unidad_medida_id = ?, marca_id = ?
       WHERE id = ?
     `, [nombre, tipo_producto_id, unidad_medida_id, marca_id, id]);
@@ -63,7 +63,7 @@ exports.deleteProducto = async (req, res) => {
   const { id } = req.params;
   try {
     await db.query(`
-      DELETE FROM Producto WHERE id = ?
+      DELETE FROM producto WHERE id = ?
     `, [id]);
 
     res.json({ mensaje: 'Producto eliminado con éxito' });

@@ -4,7 +4,7 @@ exports.obtenerHistorial = async (req, res) => {
   const { producto } = req.query; // Ej: ?producto=Pollo
 
   try {
-    let query = 'SELECT * FROM HistorialMovimientos';
+    let query = 'SELECT * FROM historialmovimientos';
     let params = [];
 
     if (producto) {

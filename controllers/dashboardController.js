@@ -10,11 +10,11 @@ exports.obtenerDashboard = async (req, res) => {
       SUM(CASE WHEN i.fecha IS NOT NULL THEN i.cantidad ELSE 0 END) AS ingresos,
       SUM(CASE WHEN s.fecha IS NOT NULL THEN s.cantidad ELSE 0 END) AS salidas,
       MAX(IFNULL(st.cantidad, 0)) AS stock_actual
-    FROM Producto p
-    LEFT JOIN Marca m ON p.marca_id = m.id
-    LEFT JOIN Ingreso i ON p.id = i.producto_id
-    LEFT JOIN Salida s ON p.id = s.producto_id
-    LEFT JOIN Stock st ON p.id = st.producto_id
+    FROM producto p
+    LEFT JOIN marca m ON p.marca_id = m.id
+    LEFT JOIN ingreso i ON p.id = i.producto_id
+    LEFT JOIN salida s ON p.id = s.producto_id
+    LEFT JOIN stock st ON p.id = st.producto_id
     WHERE 1
   `;
 

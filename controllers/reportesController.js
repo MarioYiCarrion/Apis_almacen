@@ -5,7 +5,7 @@ exports.reporteHistorialExcel = async (req, res) => {
   const { fecha } = req.query; // Ej: 2025-04-12
 
   try {
-    let query = `SELECT * FROM HistorialMovimientos`;
+    let query = `SELECT * FROM historialmovimientos`;
     let params = [];
 
     if (fecha) {

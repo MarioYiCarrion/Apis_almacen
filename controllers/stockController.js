@@ -9,9 +9,9 @@ exports.obtenerStock = async (req, res) => {
         p.nombre AS producto,
         m.nombre AS marca,
         s.cantidad
-      FROM Stock s
-      JOIN Producto p ON s.producto_id = p.id
-      JOIN Marca m ON s.marca_id = m.id
+      FROM stock s
+      JOIN producto p ON s.producto_id = p.id
+      JOIN marca m ON s.marca_id = m.id
     `;
     let params = [];
 
