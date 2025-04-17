@@ -1,7 +1,7 @@
 const db = require('../db/connection');
 
 // Crear un nuevo producto
-exports.createProducto = async (req, res) => {
+exports.createproducto = async (req, res) => {
   const { nombre, tipo_producto_id, unidad_medida_id, marca_id } = req.body;
   try {
     const [result] = await db.query(`
@@ -19,7 +19,7 @@ exports.createProducto = async (req, res) => {
 };
 
 // Obtener productos por usuario
-exports.getProductosByUsuario = async (req, res) => {
+exports.getproductosByusuario = async (req, res) => {
   const { usuarioId } = req.params;
   try {
     const [rows] = await db.query(`
@@ -42,7 +42,7 @@ exports.getProductosByUsuario = async (req, res) => {
 };
 
 // Actualizar un producto
-exports.updateProducto = async (req, res) => {
+exports.updateproducto = async (req, res) => {
   const { id } = req.params;
   const { nombre, tipo_producto_id, unidad_medida_id, marca_id } = req.body;
   try {
@@ -59,7 +59,7 @@ exports.updateProducto = async (req, res) => {
 };
 
 // Eliminar un producto
-exports.deleteProducto = async (req, res) => {
+exports.deleteproducto = async (req, res) => {
   const { id } = req.params;
   try {
     await db.query(`
