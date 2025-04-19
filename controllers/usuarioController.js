@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 // Obtener todos los usuarios
 exports.getUsuarios = async (req, res) => {
   try {
-    // Usamos await para resolver la promesa de la consulta
     const [results] = await db.query('SELECT id, nombre, correo, rol FROM usuario');
     res.json(results);
   } catch (err) {
@@ -19,16 +18,13 @@ exports.createUsuario = async (req, res) => {
   const { nombre, correo, rol, contrasena } = req.body;
 
   try {
-    // Encriptamos la contraseña
     const hashedPassword = await bcrypt.hash(contrasena, 10);
 
-    // Usamos await para la consulta de inserción
     const [result] = await db.query(
       'INSERT INTO usuario (nombre, correo, rol, contrasena) VALUES (?, ?, ?, ?)',
       [nombre, correo, rol, hashedPassword]
     );
 
-    // Retornamos la respuesta con el usuario creado
     res.json({ id: result.insertId, nombre, correo, rol });
   } catch (err) {
     console.error("Error al crear el usuario:", err);
@@ -41,7 +37,6 @@ exports.deleteUsuario = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Usamos await para la consulta de eliminación
     await db.query('DELETE FROM usuario WHERE id = ?', [id]);
     res.json({ mensaje: 'Usuario eliminado correctamente' });
   } catch (err) {
@@ -50,11 +45,12 @@ exports.deleteUsuario = async (req, res) => {
   }
 };
 
+// Login de usuario
 exports.loginUsuario = async (req, res) => {
   const { correo, contrasena } = req.body;
 
-  db.query('SELECT * FROM usuario WHERE correo = ?', [correo], async (err, results) => {
-    if (err) return res.status(500).json({ error: 'Error en el servidor' });
+  try {
+    const [results] = await db.query('SELECT * FROM usuario WHERE correo = ?', [correo]);
 
     if (results.length === 0) {
       return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
@@ -67,11 +63,9 @@ exports.loginUsuario = async (req, res) => {
       return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
     }
 
-    res.json({
-      id: usuario.id,
-      nombre: usuario.nombre,
-      correo: usuario.correo,
-      rol: usuario.rol
-    });
-  });
+    
+  } catch (err) {
+    console.error("Error en el login:", err);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
 };
