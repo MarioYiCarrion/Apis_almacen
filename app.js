@@ -16,7 +16,6 @@ app.use('/api', dashboardRoutes);
 app.use('/api/productos', require('./routes/productoRoutes'));
 app.use('/api/ingresos', require('./routes/ingresoRoutes'));
 app.use('/api/salidas', require('./routes/salidaRoutes'));
-app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/historial', require('./routes/historialRoutes'));
 app.use('/api/stock', require('./routes/stockRoutes'));
 app.use('/api/reportes', require('./routes/reportesRoutes'));

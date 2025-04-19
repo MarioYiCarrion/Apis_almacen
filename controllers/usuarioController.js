@@ -1,5 +1,6 @@
 const db = require('../db/connection');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Obtener todos los usuarios
 exports.getUsuarios = async (req, res) => {
@@ -46,5 +47,45 @@ exports.deleteUsuario = async (req, res) => {
   } catch (err) {
     console.error("Error al eliminar el usuario:", err);
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.loginUsuario = async (req, res) => {
+  const { correo, contrasena } = req.body;
+
+  try {
+    const [rows] = await db.query('SELECT * FROM usuario WHERE correo = ?', [correo]);
+    const usuario = rows[0];
+
+    if (!usuario) {
+      return res.status(401).json({ error: 'Correo no registrado' });
+    }
+
+    const passwordValida = await bcrypt.compare(contrasena, usuario.contrasena);
+    if (!passwordValida) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+
+    // Opcional: Generar token
+    const token = jwt.sign(
+      { id: usuario.id, correo: usuario.correo, rol: usuario.rol },
+      'tu_clave_secreta', // 🔐 cámbiala por una segura (idealmente en .env)
+      { expiresIn: '2h' }
+    );
+
+    res.json({
+      mensaje: 'Inicio de sesión exitoso',
+      usuario: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        correo: usuario.correo,
+        rol: usuario.rol
+      },
+      token // Enviar el token al cliente
+    });
+
+  } catch (err) {
+    console.error("Error al iniciar sesión:", err);
+    res.status(500).json({ error: 'Error en el servidor al iniciar sesión' });
   }
 };
