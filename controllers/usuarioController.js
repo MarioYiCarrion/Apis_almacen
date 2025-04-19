@@ -1,6 +1,5 @@
 const db = require('../db/connection');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 // Obtener todos los usuarios
 exports.getUsuarios = async (req, res) => {
@@ -63,7 +62,12 @@ exports.loginUsuario = async (req, res) => {
       return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
     }
 
-    
+    res.json({
+      id: usuario.id,
+      nombre: usuario.nombre,
+      correo: usuario.correo,
+      rol: usuario.rol
+    });
   } catch (err) {
     console.error("Error en el login:", err);
     res.status(500).json({ error: 'Error en el servidor' });
