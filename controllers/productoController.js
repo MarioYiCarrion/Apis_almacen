@@ -77,11 +77,8 @@ exports.getProductosPorTipo = async (req, res) => {
   const { tipoId } = req.params;
   try {
     const [rows] = await db.query(`
-      SELECT p.*, t.nombre AS tipo, u.nombre AS unidad, m.nombre AS marca
+      SELECT p.nombre
       FROM producto p
-      JOIN tipoproducto t ON p.tipo_producto_id = t.id
-      JOIN unidadmedida u ON p.unidad_medida_id = u.id
-      JOIN marca m ON p.marca_id = m.id
       WHERE p.tipo_producto_id = ?
     `, [tipoId]);
 
