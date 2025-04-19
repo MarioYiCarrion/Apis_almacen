@@ -21,6 +21,8 @@ app.use('/api/historial', require('./routes/historialRoutes'));
 app.use('/api/stock', require('./routes/stockRoutes'));
 app.use('/api/reportes', require('./routes/reportesRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/api/marcas', require('./routes/marcaRoutes'));
+
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
