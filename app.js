@@ -22,6 +22,9 @@ app.use('/api/stock', require('./routes/stockRoutes'));
 app.use('/api/reportes', require('./routes/reportesRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/marcas', require('./routes/marcaRoutes'));
+app.use('/api/unidades', require('./routes/unidadMedidaRoutes'));
+app.use('/api/tiposproducto', require('./routes/tipoProductoRoutes'));
+app.use('/api/usuarios', require('./routes/usuarioRoutes'));
 
 
 app.listen(port, () => {
