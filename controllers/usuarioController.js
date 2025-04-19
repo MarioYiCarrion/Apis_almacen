@@ -50,7 +50,7 @@ exports.deleteUsuario = async (req, res) => {
   }
 };
 
-exports.loginUsuario = (req, res) => {
+exports.loginUsuario = async (req, res) => {
   const { correo, contrasena } = req.body;
 
   db.query('SELECT * FROM usuario WHERE correo = ?', [correo], async (err, results) => {
@@ -67,7 +67,6 @@ exports.loginUsuario = (req, res) => {
       return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
     }
 
-    // Puedes generar un token JWT si lo deseas, por ahora devolvemos los datos
     res.json({
       id: usuario.id,
       nombre: usuario.nombre,
