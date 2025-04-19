@@ -14,18 +14,8 @@ router.put('/:id', productoController.updateproducto);
 // Eliminar producto
 router.delete('/:id', productoController.deleteproducto);
 
-// obtener productos por tipo
-app.get('/api/productos/tipo/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-      const [rows] = await connection.query(
-        'SELECT * FROM producto WHERE id_tipoproducto = ?',
-        [id]
-      );
-      res.json(rows);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al obtener productos' });
-    }
-  });
+// Obtener productos por tipo
+router.get('/tipo/:tipoId', productoController.getProductosPorTipo);
+
 
 module.exports = router;
