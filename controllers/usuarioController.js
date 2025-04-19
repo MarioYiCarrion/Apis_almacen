@@ -50,42 +50,29 @@ exports.deleteUsuario = async (req, res) => {
   }
 };
 
-exports.loginUsuario = async (req, res) => {
+exports.loginUsuario = (req, res) => {
   const { correo, contrasena } = req.body;
 
-  try {
-    const [rows] = await db.query('SELECT * FROM usuario WHERE correo = ?', [correo]);
-    const usuario = rows[0];
+  db.query('SELECT * FROM usuario WHERE correo = ?', [correo], async (err, results) => {
+    if (err) return res.status(500).json({ error: 'Error en el servidor' });
 
-    if (!usuario) {
-      return res.status(401).json({ error: 'Correo no registrado' });
+    if (results.length === 0) {
+      return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
     }
 
-    const passwordValida = await bcrypt.compare(contrasena, usuario.contrasena);
-    if (!passwordValida) {
-      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    const usuario = results[0];
+    const match = await bcrypt.compare(contrasena, usuario.contrasena);
+
+    if (!match) {
+      return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
     }
 
-    // Opcional: Generar token
-    const token = jwt.sign(
-      { id: usuario.id, correo: usuario.correo, rol: usuario.rol },
-      'tu_clave_secreta', // 🔐 cámbiala por una segura (idealmente en .env)
-      { expiresIn: '2h' }
-    );
-
+    // Puedes generar un token JWT si lo deseas, por ahora devolvemos los datos
     res.json({
-      mensaje: 'Inicio de sesión exitoso',
-      usuario: {
-        id: usuario.id,
-        nombre: usuario.nombre,
-        correo: usuario.correo,
-        rol: usuario.rol
-      },
-      token // Enviar el token al cliente
+      id: usuario.id,
+      nombre: usuario.nombre,
+      correo: usuario.correo,
+      rol: usuario.rol
     });
-
-  } catch (err) {
-    console.error("Error al iniciar sesión:", err);
-    res.status(500).json({ error: 'Error en el servidor al iniciar sesión' });
-  }
+  });
 };
