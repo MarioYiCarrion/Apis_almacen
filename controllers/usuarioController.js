@@ -4,7 +4,10 @@ const bcrypt = require('bcryptjs');
 // Obtener todos los usuarios
 exports.getUsuarios = (req, res) => {
   db.query('SELECT id, nombre, correo, rol FROM usuario', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      console.error("Error en la consulta:", err); // Agregar log para detalles
+      return res.status(500).json({ error: 'Error al obtener los usuarios' });
+    }
     res.json(results);
   });
 };
