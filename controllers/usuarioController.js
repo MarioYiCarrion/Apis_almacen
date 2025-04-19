@@ -18,25 +18,33 @@ exports.createUsuario = async (req, res) => {
   const { nombre, correo, rol, contrasena } = req.body;
 
   try {
+    // Encriptamos la contraseña
     const hashedPassword = await bcrypt.hash(contrasena, 10);
-    db.query(
+
+    // Usamos await para la consulta de inserción
+    const [result] = await db.query(
       'INSERT INTO usuario (nombre, correo, rol, contrasena) VALUES (?, ?, ?, ?)',
-      [nombre, correo, rol, hashedPassword],
-      (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ id: result.insertId, nombre, correo, rol });
-      }
+      [nombre, correo, rol, hashedPassword]
     );
+
+    // Retornamos la respuesta con el usuario creado
+    res.json({ id: result.insertId, nombre, correo, rol });
   } catch (err) {
+    console.error("Error al crear el usuario:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
 // Eliminar un usuario
-exports.deleteUsuario = (req, res) => {
+exports.deleteUsuario = async (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM usuario WHERE id = ?', [id], (err) => {
-    if (err) return res.status(500).json({ error: err.message });
+
+  try {
+    // Usamos await para la consulta de eliminación
+    await db.query('DELETE FROM usuario WHERE id = ?', [id]);
     res.json({ mensaje: 'Usuario eliminado correctamente' });
-  });
+  } catch (err) {
+    console.error("Error al eliminar el usuario:", err);
+    res.status(500).json({ error: err.message });
+  }
 };

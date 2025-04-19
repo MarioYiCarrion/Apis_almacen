@@ -1,27 +1,38 @@
 const db = require('../db/connection');
 
 // Obtener todos los tipos de producto
-exports.getTiposProducto = (req, res) => {
-  db.query('SELECT * FROM tipoproducto', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
+exports.getTiposProducto = async (req, res) => {
+  try {
+    const [results] = await db.query('SELECT * FROM tipoproducto');
     res.json(results);
-  });
+  } catch (err) {
+    console.error("Error al obtener tipos de producto:", err);
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // Crear un nuevo tipo de producto
-exports.createTipoProducto = (req, res) => {
+exports.createTipoProducto = async (req, res) => {
   const { nombre } = req.body;
-  db.query('INSERT INTO tipoproducto (nombre) VALUES (?)', [nombre], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
+
+  try {
+    const [result] = await db.query('INSERT INTO tipoproducto (nombre) VALUES (?)', [nombre]);
     res.json({ id: result.insertId, nombre });
-  });
+  } catch (err) {
+    console.error("Error al crear tipo de producto:", err);
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // Eliminar un tipo de producto
-exports.deleteTipoProducto = (req, res) => {
+exports.deleteTipoProducto = async (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM tipoproducto WHERE id = ?', [id], (err) => {
-    if (err) return res.status(500).json({ error: err.message });
+
+  try {
+    await db.query('DELETE FROM tipoproducto WHERE id = ?', [id]);
     res.json({ mensaje: 'Tipo de producto eliminado correctamente' });
-  });
+  } catch (err) {
+    console.error("Error al eliminar tipo de producto:", err);
+    res.status(500).json({ error: err.message });
+  }
 };
