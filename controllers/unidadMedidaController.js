@@ -3,7 +3,7 @@ const db = require('../db/connection');
 // Obtener todas las unidades de medida
 exports.getUnidades = async (req, res) => {
   try {
-    const [results] = await db.query('SELECT * FROM unidad_medida');
+    const [results] = await db.query('SELECT * FROM unidadmedida');
     res.json(results);
   } catch (err) {
     console.error("Error al obtener unidades de medida:", err);
@@ -17,7 +17,7 @@ exports.updateUnidad = async (req, res) => {
   const { nombre } = req.body;
 
   try {
-    const [result] = await db.query('UPDATE unidad_medida SET nombre = ? WHERE id = ?', [nombre, id]);
+    const [result] = await db.query('UPDATE unidadmedida SET nombre = ? WHERE id = ?', [nombre, id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Unidad de medida no encontrada' });
     }
@@ -33,7 +33,7 @@ exports.deleteUnidad = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [result] = await db.query('DELETE FROM unidad_medida WHERE id = ?', [id]);
+    const [result] = await db.query('DELETE FROM unidadmedida WHERE id = ?', [id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Unidad de medida no encontrada' });
     }
