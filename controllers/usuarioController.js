@@ -2,14 +2,15 @@ const db = require('../db/connection');
 const bcrypt = require('bcryptjs');
 
 // Obtener todos los usuarios
-exports.getUsuarios = (req, res) => {
-  db.query('SELECT id, nombre, correo, rol FROM usuario', (err, results) => {
-    if (err) {
-      console.error("Error en la consulta:", err); // Agregar log para detalles
-      return res.status(500).json({ error: 'Error al obtener los usuarios' });
-    }
+exports.getUsuarios = async (req, res) => {
+  try {
+    // Usamos await para resolver la promesa de la consulta
+    const [results] = await db.query('SELECT id, nombre, correo, rol FROM usuario');
     res.json(results);
-  });
+  } catch (err) {
+    console.error("Error en la consulta:", err);
+    res.status(500).json({ error: 'Error al obtener los usuarios' });
+  }
 };
 
 // Crear un nuevo usuario (encriptando la contraseña)
