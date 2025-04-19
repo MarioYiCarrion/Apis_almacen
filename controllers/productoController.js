@@ -71,3 +71,23 @@ exports.deleteproducto = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al eliminar producto', error });
   }
 };
+
+// Obtener productos por tipo de producto
+exports.getProductosPorTipo = async (req, res) => {
+  const { tipoId } = req.params;
+  try {
+    const [rows] = await db.query(`
+      SELECT p.*, t.nombre AS tipo, u.nombre AS unidad, m.nombre AS marca
+      FROM producto p
+      JOIN tipoproducto t ON p.tipo_producto_id = t.id
+      JOIN unidadmedida u ON p.unidad_medida_id = u.id
+      JOIN marca m ON p.marca_id = m.id
+      WHERE p.tipo_producto_id = ?
+    `, [tipoId]);
+
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener productos por tipo', error });
+  }
+};
+
