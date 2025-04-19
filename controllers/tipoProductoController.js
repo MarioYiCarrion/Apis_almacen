@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db/connection');
 
 // Obtener todos los tipos de producto
 exports.getTiposProducto = (req, res) => {

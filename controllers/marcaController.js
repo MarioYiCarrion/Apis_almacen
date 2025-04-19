@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db/connection');
 
 exports.getMarcas = (req, res) => {
   db.query('SELECT * FROM marca', (err, results) => {

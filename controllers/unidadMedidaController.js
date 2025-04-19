@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db/connection');
 
 // Obtener todas las unidades de medida
 exports.getUnidades = (req, res) => {
