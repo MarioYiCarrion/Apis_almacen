@@ -2,16 +2,16 @@ const db = require('../db/connection');
 
 // Crear un ingreso
 exports.createIngreso = async (req, res) => {
-  const { producto_id, cantidad, usuario_id } = req.body;
+  const { producto_id, cantidad, fecha, usuario_id } = req.body;
   try {
     const [result] = await db.query(`
-      INSERT INTO ingreso (producto_id, cantidad, usuario_id)
+      INSERT INTO ingreso (producto_id, cantidad, fecha, usuario_id)
       VALUES (?, ?, ?)
-    `, [producto_id, cantidad, usuario_id]);
+    `, [producto_id, cantidad, fecha,  usuario_id]);
 
     res.status(201).json({
       mensaje: 'Ingreso registrado con éxito',
-      ingreso: { id: result.insertId, producto_id, cantidad, usuario_id }
+      ingreso: { id: result.insertId, producto_id, cantidad, fecha, usuario_id }
     });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al registrar ingreso', error });
